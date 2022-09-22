@@ -1,0 +1,25 @@
+/* Definitions */
+:root {
+  --unb-red: #f00000;
+  --unb-red-dark: #900000;
+}
+
+/* Broad */
+/* All links */
+a {
+  color: var(--unb-red) !important;
+}
+
+a:visited,
+a:hover,
+a:focus,
+a:active {
+  color: var(--unb-red-dark) !important;
+}
+
+/* iframe */
+iframe.pub-list-embed {
+  /* Expand iframe embeddable as far and wide as container. */
+  width: 100%;
+  height: 100vh;
+}

@@ -1,0 +1,21 @@
+services:
+  crawler.pubcrawler.lib.unb.ca:
+    build:
+      context: .
+    restart: 'no'
+    container_name: crawler.pubcrawler.lib.unb.ca
+    networks:
+      - crawler.pubcrawler.lib.unb.ca
+    environment:
+      - SCOPUS_API_KEY=${PUBCRAWLER_SCOPUS_API_KEY}
+    volumes:
+      - ./data/guzzle_cache:/guzzle_cache
+      - ./data/web:/web
+
+networks:
+  crawler.pubcrawler.lib.unb.ca:
+    name: crawler.pubcrawler.lib.unb.ca
+
+volumes:
+  drupal-data:
+

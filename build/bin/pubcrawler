@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+use Robo\Robo;
+
+$run_dir = dirname(__FILE__);
+$autoloaderPath = "$run_dir/../vendor/autoload.php";
+$classLoader = require $autoloaderPath;
+$commandClasses = [ 'PubCrawler\Robo\Plugin\Command\PubCrawlerCommands' ];
+
+$appName = 'PubCrawler';
+$appVersion = '0.01';
+
+$runner = new \Robo\Runner($commandClasses);
+$runner
+  ->setRelativePluginNamespace('Robo\Plugin')
+  ->setSelfUpdateRepository('unb-libraries\PubCrawler')
+  ->setEnvConfigPrefix('PUBCRAWL')
+  ->setClassLoader($classLoader);
+
+$statusCode = $runner->execute($_SERVER['argv'], $appName, $appVersion);
+exit($statusCode);

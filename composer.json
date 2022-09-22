@@ -1,0 +1,20 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Dockworker\\": ".dockworker/src"
+    }
+  },
+  "description": "Scaffold and provision local development for crawler.pubcrawler.lib.unb.ca",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "name": "unb-libraries/crawler.pubcrawler.lib.unb.ca",
+  "prefer-stable": true,
+  "require-dev": {
+    "unb-libraries/dockworker-cli": "^5"
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "vendor/bin/dockworker dockworker:git:setup-hooks"
+    ]
+  }
+}
