@@ -11,14 +11,12 @@ dockworker:
     uuid: 3095
   deployment:
     environments:
-      - dev
       - prod
   github:
     repo: crawler.pubcrawler.lib.unb.ca
     owner: unb-libraries
   image:
     push_branches:
-      - dev
       - prod
     name: ghcr.io/unb-libraries/crawler.pubcrawler.lib.unb.ca
     date_tag_image: true
