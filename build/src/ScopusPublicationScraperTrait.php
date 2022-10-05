@@ -125,7 +125,7 @@ trait ScopusPublicationScraperTrait {
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
   private function setScopusPublicationIdsFromPage() : void {
-    $this->say("Querying $this->curScrapeScopusUri...");
+    $this->saySanitizeApiKey("Querying $this->curScrapeScopusUri...");
     $response = $this->guzzleClient->get($this->curScrapeScopusUri);
     $page_data = json_decode(
       $response->getBody(),
@@ -229,7 +229,7 @@ trait ScopusPublicationScraperTrait {
    * Retrieves/sets publication metadata from the current scraped publication.
    */
   private function setScopusCurPublication() : void {
-    $this->say("Querying $this->curScrapeScopusUri...");
+    $this->saySanitizeApiKey("Querying $this->curScrapeScopusUri...");
     // Individual Items Rarely/Do Not Change. Cache to avoid API queries.
     $response = $this->guzzleCachedClient->get($this->curScrapeScopusUri);
     $this->curScrapeScopusPublicationData = json_decode(
@@ -319,6 +319,22 @@ trait ScopusPublicationScraperTrait {
       'citation' => $citation_full,
       'abstract' => $abstract,
     ];
+  }
+
+  /**
+   * Output a string to the console, Sanitizing the scopus api key.
+   *
+   * @param $string
+   *   The unsanitized string to output.
+   */
+  private function saySanitizeApiKey($string) : void {
+    $this->say(
+      str_replace(
+        $this->curScrapeScopusApiKey,
+        '<apikey>',
+        $string
+      )
+    );
   }
 
 }
