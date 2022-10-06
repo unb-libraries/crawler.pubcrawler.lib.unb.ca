@@ -85,8 +85,6 @@ trait ScopusPublicationScraperTrait {
     $this->initGuzzleClients();
     $this->initScopusScrape($search_uri, $api_key);
     $this->curScrapeScopusPublications = [];
-    $this->curScrapeScopusPublicationIds = [];
-    $this->setScopusCurPublicationIds();
     $this->setScopusCurPublications();
     return $this->curScrapeScopusPublications;
   }
@@ -111,11 +109,39 @@ trait ScopusPublicationScraperTrait {
   }
 
   /**
+   * Sets the Scopus publication data found within all pages of the search URI.
+   */
+  private function setScopusCurPublications() : void {
+    while ($this->curScrapeScopusUri != '') {
+      $this->setScopusPublicationsFromPage();
+    }
+  }
+
+  /**
    * Sets the Scopus IDs found within all pages of the search URI.
    */
   private function setScopusCurPublicationIds() : void {
     while ($this->curScrapeScopusUri != '') {
       $this->setScopusPublicationIdsFromPage();
+    }
+  }
+
+  /**
+   * Sets the Scopus publication data found within the current search page.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   */
+  private function setScopusPublicationsFromPage() : void {
+    $this->say("Querying $this->curScrapeScopusUri...");
+    $response = $this->guzzleClient->get($this->curScrapeScopusUri);
+    $page_data = json_decode(
+      $response->getBody(),
+      JSON_PRETTY_PRINT
+    );
+    $this->curScrapeScopusUri = self::getNextLinkFromPageData($page_data);
+    $scraped_publications = self::getScopusPublicationsFromPageData($page_data);
+    if (!empty($scraped_publications)) {
+      $this->addScrapedPublications($scraped_publications);
     }
   }
 
@@ -169,6 +195,23 @@ trait ScopusPublicationScraperTrait {
    * @return string[]
    *   An array of Scopus publication IDs found within the page data.
    */
+  private static function getScopusPublicationsFromPageData(array $data) : array {
+    $publications = [];
+    foreach ($data['search-results']['entry'] as $entry) {
+      $publications[] = $entry;
+    }
+    return $publications;
+  }
+
+  /**
+   * Retrieves Scopus publication IDs from search result page data.
+   *
+   * @param array $data
+   *   The current page data.
+   *
+   * @return string[]
+   *   An array of Scopus publication IDs found within the page data.
+   */
   private static function getScopusPublicationIdsFromPageData(array $data) : array {
     $ids = [];
     foreach ($data['search-results']['entry'] as $entry) {
@@ -191,6 +234,24 @@ trait ScopusPublicationScraperTrait {
   }
 
   /**
+   * Adds Scopus publications to the current scrape's Scopus publications list.
+   *
+   * @param array $publications
+   *   The Scopus publications to add to the list.
+   */
+  private function addScrapedPublications(array $publications) : void {
+    $publications_meta = [];
+    foreach ($publications as $publication) {
+      $publications_meta[] = getMetadataFromPublication($publication);
+    }
+
+    $this->curScrapeScopusPublications = array_merge(
+      $this->curScrapeScopusPublications,
+      $publications_meta)
+    );
+  }
+
+  /**
    * Adds Scopus IDs to the current scrape's Scopus publication IDs list.
    *
    * @param array $ids
@@ -206,7 +267,7 @@ trait ScopusPublicationScraperTrait {
   /**
    * Retrieves/sets publication metadata from all scraped publications.
    */
-  private function setScopusCurPublications() : void {
+  private function setScopusCurPublicationsFromIds() : void {
     $this->curScrapeScopusUri = '';
     foreach ($this->curScrapeScopusPublicationIds as $this->curScrapeScopusPublicationId) {
       $this->setScopusPublicationPageUri();
@@ -237,6 +298,91 @@ trait ScopusPublicationScraperTrait {
       JSON_PRETTY_PRINT
     );
     $this->curScrapeScopusPublications[] = $this->getPublicationMetadataFromFullData();
+  }
+
+  /**
+   * Constructs a useful summary of metadata from raw publication metadata.
+   *
+   * @param $publication
+   *   The Scopus publication to summarize.
+   *
+   * @return string[]
+   *   A standardized associative array of the publication summary metadata.
+   */
+  private function getMetadataFromPublication(array $publication) : array {
+    $citation_data = $this->curScrapeScopusPublicationData;
+    $doi = $citation_data['abstracts-retrieval-response']['item']['bibrecord']['item-info']['itemidlist']['ce:doi']
+      ?? NULL;
+    $citation = $citation_data['abstracts-retrieval-response']['item']['bibrecord']['head']
+      ?? NULL;
+    $citation_full = '';
+    $abstract = '';
+
+    // If citation data is valid...
+    if ($citation) {
+      // Get UNIQUE authors (authors have an entry per affiliation).
+      $authors = !empty($citation['author-group'])
+        ? array_column($citation['author-group'], 'author') : NULL;
+      $authors = $authors ? array_column($authors, '0') : NULL;
+      // Get author names.
+      $names = !empty($authors[0]['ce:indexed-name'])
+        ? array_column($authors, 'ce:indexed-name') : NULL;
+      // De-duplicate authors (one entry per affiliation).
+      $names = (!empty($names) and (count($names) > 1)) ? array_unique($names)
+        : $names;
+      // Get title.
+      $title = $citation['citation-title'] ?? NULL;
+      // Get abstract.
+      $abstract = $citation['abstracts'] ?? NULL;
+      // Get publication year.
+      $year = $citation['source']['publicationyear']['@first'] ?? NULL;
+      // Get source title.
+      $source = $citation['source']['sourcetitle'] ?? NULL;
+      // Get volume.
+      $volume = $citation['source']['volisspag']['voliss']['@volume'] ?? NULL;
+      // Get issue.
+      $issue = $citation['source']['volisspag']['voliss']['@issue'] ?? NULL;
+      // Get page range.
+      $firstp = $citation['source']['volisspag']['pagerange']['@first'] ?? NULL;
+      $lastp = $citation['source']['volisspag']['pagerange']['@last'] ?? NULL;
+      // Get pages as backup.
+      $pages = $citation['source']['volisspag']['pages'] ?? NULL;
+      // Prepare citation elements.
+      // Author names.
+      $c_names = !empty($names) ? implode(', ', $names) : NULL;
+      $c_names = ($c_names and $year) ? "$c_names ($year)."
+        : $c_names;
+      $c_names = $c_names ? "$c_names " : $c_names;
+      // Title.
+      $c_title = $title ? trim($title) : NULL;
+      // Only add period if title valid and last character is not punctuation.
+      if ($c_title and !preg_match("/[.!?,;:]$/", $c_title)) {
+        $c_title .= '.';
+      }
+      // Always add space if valid.
+      $c_title = $c_title ? "$c_title " : NULL;
+      // Publication.
+      $c_pub = $source ?? NULL;
+      $c_pub = ($c_pub and $volume) ? "$c_pub, $volume" : $c_pub;
+      $c_pub = ($c_pub and $issue) ? "$c_pub($issue)" : $c_pub;
+      $c_pub = ($c_pub and $firstp) ? "$c_pub, $firstp" : $c_pub;
+      $c_pub = ($c_pub and $lastp) ? "$c_pub-$lastp" : $c_pub;
+      $c_pub = ($c_pub and $pages and !$firstp and !$lastp) ? "$c_pub $pages"
+        : $c_pub;
+      $c_pub = $c_pub ? "$c_pub." : NULL;
+      // Build citation.
+      $citation_full = ($c_title and $c_names) ? "$c_names$c_title" : $c_title;
+      $citation_full = ($citation_full and $c_pub) ? "$citation_full$c_pub"
+        : $citation_full;
+    }
+
+    // Return results.
+    return [
+      'scopus_id' => $this->curScrapeScopusPublicationId,
+      'doi' => $doi,
+      'citation' => $citation_full,
+      'abstract' => $abstract,
+    ];
   }
 
   /**

@@ -4,7 +4,7 @@ pubcrawler:
   collections:
     cri:
       name: CRI Publications
-      uri: https://api.elsevier.com/content/search/scopus?start=0&count=25&query=af-id(60084724)&apiKey=%s
+      uri: https://api.elsevier.com/content/search/scopus?start=0&count=25&query=af-id(60084724)&apiKey=%s&view=COMPLETE
       api-key-env-secret: SCOPUS_API_KEY
       scraper: scrapeScopusPublications
       writer: writeCriPublications
