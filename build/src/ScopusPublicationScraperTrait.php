@@ -242,12 +242,12 @@ trait ScopusPublicationScraperTrait {
   private function addScrapedPublications(array $publications) : void {
     $publications_meta = [];
     foreach ($publications as $publication) {
-      $publications_meta[] = getMetadataFromPublication($publication);
+      $publications_meta[] = $this->getMetadataFromPublication($publication);
     }
 
     $this->curScrapeScopusPublications = array_merge(
       $this->curScrapeScopusPublications,
-      $publications_meta)
+      $publications_meta
     );
   }
 
@@ -310,79 +310,62 @@ trait ScopusPublicationScraperTrait {
    *   A standardized associative array of the publication summary metadata.
    */
   private function getMetadataFromPublication(array $publication) : array {
-    $citation_data = $this->curScrapeScopusPublicationData;
-    $doi = $citation_data['abstracts-retrieval-response']['item']['bibrecord']['item-info']['itemidlist']['ce:doi']
-      ?? NULL;
-    $citation = $citation_data['abstracts-retrieval-response']['item']['bibrecord']['head']
-      ?? NULL;
+    $scopus_id = $publication['dc:identifier'] ?
+      $this->getScopusIdFromIdentifier($publication['dc:identifier']) : NULL;
+    $doi = $publication['prism:doi'] ?? NULL;
     $citation_full = '';
     $abstract = '';
-
-    // If citation data is valid...
-    if ($citation) {
-      // Get UNIQUE authors (authors have an entry per affiliation).
-      $authors = !empty($citation['author-group'])
-        ? array_column($citation['author-group'], 'author') : NULL;
-      $authors = $authors ? array_column($authors, '0') : NULL;
-      // Get author names.
-      $names = !empty($authors[0]['ce:indexed-name'])
-        ? array_column($authors, 'ce:indexed-name') : NULL;
-      // De-duplicate authors (one entry per affiliation).
-      $names = (!empty($names) and (count($names) > 1)) ? array_unique($names)
-        : $names;
-      // Get title.
-      $title = $citation['citation-title'] ?? NULL;
-      // Get abstract.
-      $abstract = $citation['abstracts'] ?? NULL;
-      // Get publication year.
-      $year = $citation['source']['publicationyear']['@first'] ?? NULL;
-      // Get source title.
-      $source = $citation['source']['sourcetitle'] ?? NULL;
-      // Get volume.
-      $volume = $citation['source']['volisspag']['voliss']['@volume'] ?? NULL;
-      // Get issue.
-      $issue = $citation['source']['volisspag']['voliss']['@issue'] ?? NULL;
-      // Get page range.
-      $firstp = $citation['source']['volisspag']['pagerange']['@first'] ?? NULL;
-      $lastp = $citation['source']['volisspag']['pagerange']['@last'] ?? NULL;
-      // Get pages as backup.
-      $pages = $citation['source']['volisspag']['pages'] ?? NULL;
-      // Prepare citation elements.
-      // Author names.
-      $c_names = !empty($names) ? implode(', ', $names) : NULL;
-      $c_names = ($c_names and $year) ? "$c_names ($year)."
-        : $c_names;
-      $c_names = $c_names ? "$c_names " : $c_names;
-      // Title.
-      $c_title = $title ? trim($title) : NULL;
-      // Only add period if title valid and last character is not punctuation.
-      if ($c_title and !preg_match("/[.!?,;:]$/", $c_title)) {
-        $c_title .= '.';
-      }
-      // Always add space if valid.
-      $c_title = $c_title ? "$c_title " : NULL;
-      // Publication.
-      $c_pub = $source ?? NULL;
-      $c_pub = ($c_pub and $volume) ? "$c_pub, $volume" : $c_pub;
-      $c_pub = ($c_pub and $issue) ? "$c_pub($issue)" : $c_pub;
-      $c_pub = ($c_pub and $firstp) ? "$c_pub, $firstp" : $c_pub;
-      $c_pub = ($c_pub and $lastp) ? "$c_pub-$lastp" : $c_pub;
-      $c_pub = ($c_pub and $pages and !$firstp and !$lastp) ? "$c_pub $pages"
-        : $c_pub;
-      $c_pub = $c_pub ? "$c_pub." : NULL;
-      // Build citation.
-      $citation_full = ($c_title and $c_names) ? "$c_names$c_title" : $c_title;
-      $citation_full = ($citation_full and $c_pub) ? "$citation_full$c_pub"
-        : $citation_full;
+    $authors = $publication['author'] ?? NULL;
+    // Get author names.
+    $names = !empty($authors[0]['authname'])
+      ? array_column($authors, 'authname') : NULL;
+    // Get title.
+    $title = $publication['dc:title'] ?? NULL;
+    // Get abstract.
+    $abstract = $publication['dc:description'] ?? NULL;
+    // Get publication year.
+    $year = substr($publication['prism:coverDate'], 0, 4) ?? NULL;
+    // Get source title.
+    $source = $publication['prism:publicationName'] ?? NULL;
+    // Get volume.
+    $volume = $publication['prism:volume'] ?? NULL;
+    // Get issue.
+    $issue = $publication['prism:issueIdentifier'] ?? NULL;
+    // Get page range.
+    $pages = $publication['prism:pageRange'] ?? NULL;
+    // Prepare citation elements.
+    // Author names.
+    $c_names = !empty($names) ? implode(', ', $names) : NULL;
+    $c_names = ($c_names and $year) ? "$c_names ($year)."
+      : $c_names;
+    $c_names = $c_names ? "$c_names " : $c_names;
+    // Title.
+    $c_title = $title ? trim($title) : NULL;
+    // Only add period if title valid and last character is not punctuation.
+    if ($c_title and !preg_match("/[.!?,;:]$/", $c_title)) {
+      $c_title .= '.';
     }
-
+    // Always add space if valid.
+    $c_title = $c_title ? "$c_title " : NULL;
+    // Publication.
+    $c_pub = $source ?? NULL;
+    $c_pub = ($c_pub and $volume) ? "$c_pub, $volume" : $c_pub;
+    $c_pub = ($c_pub and $issue) ? "$c_pub($issue)" : $c_pub;
+    $c_pub = ($c_pub and $pages) ? "$c_pub $pages"
+      : $c_pub;
+    $c_pub = $c_pub ? "$c_pub." : NULL;
+    // Build citation.
+    $citation_full = ($c_title and $c_names) ? "$c_names$c_title" : $c_title;
+    $citation_full = ($citation_full and $c_pub) ? "$citation_full$c_pub"
+      : $citation_full;
     // Return results.
-    return [
-      'scopus_id' => $this->curScrapeScopusPublicationId,
+    $results = [
+      'scopus_id' => $scopus_id,
       'doi' => $doi,
       'citation' => $citation_full,
       'abstract' => $abstract,
     ];
+    return $results;
   }
 
   /**
