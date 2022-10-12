@@ -15,14 +15,14 @@
             {%- for publication in publications -%}
                 <li class="pub-item">
                     {%- if publication['doi'] is not empty -%}
-                    <a class="pub-doi" href="https://doi.org/{{ publication['doi'] }}">
+                    <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}">
                         {%- endif -%}
                         <p class="pub-citation">{{ publication['citation'] }}</p>
                         {%- if publication['doi'] is not empty -%}
                     </a>
                     {%- endif -%}
                     {%- if publication['abstract'] is not empty -%}
-                        <button class="pub-abstract-button btn collapsible" type="button" aria-controls="pubAbstractContainer">
+                        <button class="pub-abstract-button btn collapsible d-block d-md-inline-block" type="button" aria-controls="pubAbstractContainer">
                             Abstract
                         </button>
                         <div id="#pubAbstractContainer" class="pub-abstract-container collapsible-content">

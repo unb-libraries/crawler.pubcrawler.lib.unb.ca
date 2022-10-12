@@ -24,8 +24,7 @@ ul {
 }
 
 li.pub-item {
-    padding: .5rem;
-    padding-bottom: 2rem;
+    padding: .5rem .5rem 1rem;
 }
 
 li.pub-item:hover {
@@ -54,13 +53,13 @@ div.pub-list-container {
 
 /* Citation */
 .pub-citation {
-    margin-bottom: 0;
+    margin-bottom: .5rem;
 }
 
 
 /* Abstract */
 .pub-abstract {
-    margin-top: 2rem;
+    margin: 1rem;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
@@ -71,7 +70,7 @@ div.pub-list-container {
 
 /* Style the collapsible content. Note: hidden by default */
 .collapsible-content {
-    padding: 0 18px;
+    width: 100%;
     background-color: white;
     max-height: 0;
     overflow: hidden;
@@ -86,4 +85,16 @@ div.pub-list-container {
 
 .active:after {
     content: '-'; /* Unicode character for "minus" sign (-) */
+}
+
+@media (min-width: 768px) {
+	a.pub-doi {
+    	width: calc(100% - 108px);
+    }
+}
+/* Suggested as text-align: justify looks odd on phone. */
+@media (max-width: 768px) {
+	.pub-abstract {
+		text-align: left;
+	}
 }
