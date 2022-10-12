@@ -13,6 +13,10 @@ a {
     color: var(--unb-red-dark) !important;
 }
 
+a:hover p.pub-citation {
+  text-decoration: underline !important;
+}
+
 /* All paragraphs */
 p {
     display: inline-block;
