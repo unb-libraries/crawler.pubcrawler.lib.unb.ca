@@ -67,7 +67,11 @@ trait CriPublicationFormatterTrait {
       $this->say("Writing $file_output_path");
       file_put_contents(
         $file_output_path,
-        $twig->render($output_file, ['publications' => $publications])
+        $twig->render($output_file,
+          ['publications' => $publications,
+          'publications_year' => $publications_year,
+          'publications_past' => $publications_past
+        ])
       );
     }
 

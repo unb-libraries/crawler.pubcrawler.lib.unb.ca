@@ -10,9 +10,9 @@
 
 <body>
 <div class="pub-list-container">
-    {%- if publications is not empty -%}
+    {%- if publications_year is not empty -%}
         <ul class="pub-list">
-            {%- for publication in publications -%}
+            {%- for publication in publications_year -%}
                 <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
                     {%- if publication['doi'] is not empty -%}
                     <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}">
