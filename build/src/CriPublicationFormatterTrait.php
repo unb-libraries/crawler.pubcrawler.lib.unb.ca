@@ -29,6 +29,19 @@ trait CriPublicationFormatterTrait {
     array $publications,
     string $path
   ) : void {
+    // Sort and Separate current year from past publications.
+    $publications_year = $publications_past = [];
+    $titles = array_column($publications, 'title');
+    array_multisort($titles, SORT_ASC, $publications);
+    $year = date('Y');
+    foreach ($publications as $publication) {
+      if ($publication['year'] == $year) {
+        $publications_year[] = $publication;
+      }
+      else {
+        $publications_past[] = $publication;
+      }
+    }
     // Setup Twig.
     $loader = new FilesystemLoader(__DIR__ . '/../templates/cri');
     $options = array(

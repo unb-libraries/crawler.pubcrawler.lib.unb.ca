@@ -362,6 +362,8 @@ trait ScopusPublicationScraperTrait {
     $results = [
       'scopus_id' => $scopus_id,
       'doi' => $doi,
+      'title' => $title,
+      'year' => $year,
       'citation' => $citation_full,
       'abstract' => $abstract,
     ];
