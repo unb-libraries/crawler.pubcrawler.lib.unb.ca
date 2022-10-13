@@ -1,38 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>CRI Publications List</title>
-    <link href=".\css\style-embed.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <script src=".\js\collapsible.js"></script>
+  <meta charset="utf-8">
+  <title>CRI Publications List</title>
+  <link href=".\css\style-embed.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  <script src=".\js\collapsible.js"></script>
+  <script src=".\js\tabs.js"></script>
 </head>
 
 <body>
-<div class="pub-list-container">
+  {% set currentYear = date('Y') %}
+  <!-- Tab links -->
+  <div class="tab">
+    <button href="#" class="tablinks btn d-block d-md-inline-block" onclick="openPubs(event, 'current')">{{ currentYear|date('Y') }}</button>
+    <button href="#" class="tablinks btn d-block d-md-inline-block" onclick="openPubs(event, 'past')">2002-{{ currentYear|date('Y') - 1 }}</button>
+  </div>
+  <div id="current" class="pub-list-container tabcontent">
     {%- if publications_year is not empty -%}
-        <ul class="pub-list">
-            {%- for publication in publications_year -%}
-                <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
-                    {%- if publication['doi'] is not empty -%}
-                    <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}">
-                        {%- endif -%}
-                        <p class="pub-citation">{{ publication['citation'] }}</p>
-                        {%- if publication['doi'] is not empty -%}
-                    </a>
-                    {%- endif -%}
-                    {%- if publication['abstract'] is not empty -%}
-                        <button class="pub-abstract-button btn collapsible d-block d-md-inline-block" type="button" aria-controls="pubAbstractContainer">
-                            Abstract
-                        </button>
-                        <div id="#pubAbstractContainer" class="pub-abstract-container collapsible-content">
-                            <p class="pub-abstract">{{ publication['abstract'] }}</p>
-                        </div>
-                    {%- endif -%}
-                </li>
-            {%- endfor -%}
-        </ul>
+      <ul class="pub-list">
+        {%- for publication in publications_year -%}
+          <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
+            {%- if publication['doi'] is not empty -%}
+              <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}">
+            {%- endif -%}
+            <p class="pub-citation">{{ publication['citation'] }}</p>
+            {%- if publication['doi'] is not empty -%}
+              </a>
+            {%- endif -%}
+            {%- if publication['abstract'] is not empty -%}
+              <button class="pub-abstract-button btn collapsible d-block d-md-inline-block" type="button" aria-controls="pubAbstractContainer">
+                  Abstract
+              </button>
+              <div id="#pubAbstractContainer" class="pub-abstract-container collapsible-content">
+                  <p class="pub-abstract">{{ publication['abstract'] }}</p>
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
     {%- endif -%}
-</div>
+  </div>
+  <div id="past" class="pub-list-container tabcontent">
+    {%- if publications_past is not empty -%}
+      <ul class="pub-list">
+        {%- for publication in publications_past -%}
+          <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
+            {%- if publication['doi'] is not empty -%}
+              <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}">
+            {%- endif -%}
+            <p class="pub-citation">{{ publication['citation'] }}</p>
+            {%- if publication['doi'] is not empty -%}
+              </a>
+            {%- endif -%}
+            {%- if publication['abstract'] is not empty -%}
+              <button class="pub-abstract-button btn collapsible d-block d-md-inline-block" type="button" aria-controls="pubAbstractContainer">
+                  Abstract
+              </button>
+              <div id="#pubAbstractContainer" class="pub-abstract-container collapsible-content">
+                  <p class="pub-abstract">{{ publication['abstract'] }}</p>
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
 </body>
 </html>

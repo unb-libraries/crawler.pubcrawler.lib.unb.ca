@@ -1,16 +1,16 @@
 /* Definitions */
 :root {
-    --unb-red: #f00000;
-    --unb-red-dark: #900000;
-    --unb-gray: #5b6770;
-    --unb-gray-lite: #9ba7b0;
-    --unb-gray-lite2: #dbe7f0;
+  --unb-red: #f00000;
+  --unb-red-dark: #900000;
+  --unb-gray: #5b6770;
+  --unb-gray-lite: #9ba7b0;
+  --unb-gray-lite2: #dbe7f0;
 }
 
 /* Broad */
 /* All links */
 a {
-    color: var(--unb-red-dark) !important;
+  color: var(--unb-red-dark) !important;
 }
 
 a:hover p.pub-citation {
@@ -19,86 +19,114 @@ a:hover p.pub-citation {
 
 /* All paragraphs */
 p {
-    display: inline-block;
-    text-align: justify;
+  display: inline-block;
+  text-align: justify;
 }
 /* All unordererd lists */
 ul {
-    list-style: none;
+  list-style: none;
 }
 
 li.pub-item {
-    padding: .5rem .5rem 1rem;
+  padding: .5rem .5rem 1rem;
 }
 
 li.pub-item:hover {
-    background-color: var(--unb-gray-lite2);
+  background-color: var(--unb-gray-lite2);
 }
 
 /* Buttons */
 .btn {
-    float: right;
-    margin-bottom: 1rem;
-    padding: 0 .4rem !important;
-    border: 1px solid black !important;
-    transition: none !important;
-    background-color: white !important;
+  margin-bottom: 1rem;
+  padding: 0 .4rem !important;
+  border: 1px solid black !important;
+  transition: none !important;
+  background-color: white !important;
 }
 
-.btn::after {
-    font-weight: bold;
-    font-family: monospace;
+.btn.pub-abstract-button {
+  float: right;
+}
+
+.btn.pub-abstract-button::after {
+  font-weight: bold;
+  font-family: monospace;
 }
 
 /* Publication list container */
 div.pub-list-container {
-    margin: 1em;
+  margin: 1em;
 }
 
 /* Citation */
 .pub-citation {
-    margin-bottom: .5rem;
+  margin-bottom: .5rem;
 }
-
 
 /* Abstract */
 .pub-abstract {
-    margin: 1rem;
+  margin: 1rem;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active, .collapsible:hover {
-    background-color: black !important;
-    color: white !important;
+.active, .btn:hover {
+  background-color: black !important;
+  color: white !important;
+}
+
+/* Tabs */
+.tab {
+  overflow: hidden;
+  border: 1px solid var(--unb-gray);
+  background-color: var(--unb-gray-lite2);
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid var(--unb-gray-lite2);
+  border-top: none;
 }
 
 /* Style the collapsible content. Note: hidden by default */
 .collapsible-content {
-    width: 100%;
-    background-color: white;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
+  width: 100%;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
 }
 
-.collapsible:after {
-    content: '+'; /* Unicode character for "plus" sign (+) */
-    float: right;
-    margin-left: 5px;
+.pub-abstract-button.collapsible:after {
+  content: '+'; /* Unicode character for "plus" sign (+) */
+  float: right;
+  margin-left: 5px;
 }
 
-.active:after {
-    content: '-'; /* Unicode character for "minus" sign (-) */
+.pub-abstract-button.active:after {
+  content: '-'; /* Unicode character for "minus" sign (-) */
 }
 
 @media (min-width: 768px) {
 	a.pub-doi {
-    	width: calc(100% - 108px);
-    }
+  	width: calc(100% - 108px);
+  }
 }
 /* Suggested as text-align: justify looks odd on phone. */
 @media (max-width: 768px) {
-	.pub-abstract {
+  .pub-abstract {
 		text-align: left;
 	}
 }
