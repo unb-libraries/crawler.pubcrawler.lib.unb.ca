@@ -31,10 +31,9 @@ trait CriPublicationFormatterTrait {
   ) : void {
     // Sort and Separate current year from past publications.
     $publications_year = $publications_past = [];
-    $titles = array_column($publications, 'title');
-    array_multisort($titles, SORT_ASC, $publications);
     $years = array_column($publications, 'year');
-    array_multisort($years, SORT_DESC, $publications);
+    $titles = array_column($publications, 'title');
+    array_multisort($years, SORT_DESC, $titles, SORT_ASC, $publications);
     $year = date('Y');
     foreach ($publications as $publication) {
       if ($publication['year'] == $year) {

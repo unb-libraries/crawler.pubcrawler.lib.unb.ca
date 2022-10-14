@@ -13,10 +13,10 @@
   {% set currentYear = date('Y') %}
   <!-- Tab links -->
   <div class="tab">
-    <button href="#" class="tablinks btn d-block d-md-inline-block" onclick="openPubs(event, 'current')">{{ currentYear|date('Y') }}</button>
+    <button href="#" class="tablinks btn d-block d-md-inline-block active" onclick="openPubs(event, 'current')">{{ currentYear|date('Y') }}</button>
     <button href="#" class="tablinks btn d-block d-md-inline-block" onclick="openPubs(event, 'past')">2002-{{ currentYear|date('Y') - 1 }}</button>
   </div>
-  <div id="current" class="pub-list-container tabcontent">
+  <div id="current" class="pub-list-container tabcontent tab-default">
     {%- if publications_year is not empty -%}
       <ul class="pub-list">
         {%- for publication in publications_year -%}

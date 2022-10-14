@@ -44,6 +44,14 @@ li.pub-item:hover {
   background-color: white !important;
 }
 
+.tablinks {
+  background-color: var(--unb-gray-lite2) !important;
+  margin-bottom: 0;
+  border: none !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
 .btn.pub-abstract-button {
   float: right;
 }
@@ -76,8 +84,9 @@ div.pub-list-container {
 
 /* Tabs */
 .tab {
+  padding: .5rem .5rem 0 .5rem;
   overflow: hidden;
-  border: 1px solid var(--unb-gray);
+  border-bottom: 1px solid black;
   background-color: var(--unb-gray-lite2);
 }
 
@@ -98,6 +107,10 @@ div.pub-list-container {
   padding: 6px 12px;
   border: 1px solid var(--unb-gray-lite2);
   border-top: none;
+}
+
+.tabcontent.tab-default {
+  display: block;
 }
 
 /* Style the collapsible content. Note: hidden by default */
