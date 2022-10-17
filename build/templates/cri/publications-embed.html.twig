@@ -18,7 +18,7 @@
   </div>
   <div id="current" class="pub-list-container tabcontent tab-default">
     {%- if publications_year is not empty -%}
-      <h3 class="current-pubs-header"><i>Updated as of {{ datestamp }}. Publications are sorted alphabetically and by year. </i></h3>
+      <h3 class="current-pubs-header"><i>Updated as of {{ datestamp }}. Publications are sorted alphabetically. </i></h3>
       <ul class="pub-list">
         {%- for publication in publications_year -%}
           <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
