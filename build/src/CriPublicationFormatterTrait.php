@@ -29,13 +29,17 @@ trait CriPublicationFormatterTrait {
     array $publications,
     string $path
   ) : void {
+    // Capture timestamp.
+    $datestamp = date('F j, Y');
     // Sort and Separate current year from past publications.
     $publications_year = $publications_past = [];
     $years = array_column($publications, 'year');
     $titles = array_column($publications, 'title');
     array_multisort($years, SORT_DESC, $titles, SORT_ASC, $publications);
-    $year = date('Y');
+    $year = substr($datestamp, -4);
     foreach ($publications as $publication) {
+      $this->say(print_r($year));
+      $this->say(print_r($publication['year']));
       if ($publication['year'] == $year) {
         $publications_year[] = $publication;
       }
@@ -68,8 +72,8 @@ trait CriPublicationFormatterTrait {
       $this->say("Writing $file_output_path");
       file_put_contents(
         $file_output_path,
-        $twig->render($output_file,
-          ['publications' => $publications,
+        $twig->render($output_file, [
+          'datestamp' => $datestamp,
           'publications_year' => $publications_year,
           'publications_past' => $publications_past
         ])

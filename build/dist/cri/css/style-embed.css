@@ -29,6 +29,7 @@ ul {
 
 li.pub-item {
   padding: .5rem .5rem 1rem;
+  border-bottom: 1px solid var(--unb-gray-lite2);
 }
 
 li.pub-item:hover {
