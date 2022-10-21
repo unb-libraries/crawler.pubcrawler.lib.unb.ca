@@ -12,6 +12,9 @@ dockworker:
   deployment:
     environments:
       - prod
+    workflow:
+      source: dockworker-cli
+      type: deployment-workflow-cron
   github:
     repo: crawler.pubcrawler.lib.unb.ca
     owner: unb-libraries

@@ -7,7 +7,7 @@ on:
 
 jobs:
   cli:
-    uses: unb-libraries/dockworker-cli/.github/workflows/deployment-workflow-norun.yaml@5.x
+    uses: unb-libraries/dockworker-cli/.github/workflows/deployment-workflow-cron.yaml@5.x
     with:
       deploy-branches: '["prod"]'
     secrets:
