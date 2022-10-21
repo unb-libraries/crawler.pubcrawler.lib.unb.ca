@@ -67,6 +67,11 @@ div.pub-list-container {
   margin: 1em;
 }
 
+/* Headers */
+[class$="pubs-header"] {
+  font-size: 1.5rem;
+}
+
 /* Citation */
 .pub-citation {
   margin-bottom: .5rem;

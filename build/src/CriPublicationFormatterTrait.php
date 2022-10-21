@@ -61,12 +61,7 @@ trait CriPublicationFormatterTrait {
 
     foreach ($output_files as $output_file) {
       $this->say("Writing $output_file");
-      $file_output_path = $path . '/'.
-        str_replace(
-          '.twig',
-          '',
-          $output_file
-        );
+      $file_output_path = $path . '/'. 'index.html';
       $this->say("Writing $file_output_path");
       file_put_contents(
         $file_output_path,
