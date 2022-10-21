@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron-crawler-pubcrawler-lib-unb-ca
+  namespace: prod
+  labels:
+    app: pubcrawler
+    tier: cron
+spec:
+  schedule: "03 01 * * *"
+  startingDeadlineSeconds: 480
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    metadata:
+      name: cron-crawler-pubcrawler-lib-unb-ca
+      labels:
+        app: pubcrawler
+        tier: cron
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          nodeSelector:
+            deployenv: dev
+          containers:
+            -
+              name: cron-crawler-pubcrawler-lib-unb-ca
+              env:
+                -
+                  name: DEPLOY_ENV
+                  value: prod
+                -
+                  name: SCOPUS_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: pubcrawler
+                      key: scopus-api-key
+              image: "||DEPLOYMENTIMAGE||"
+              imagePullPolicy: Always
+              volumeMounts:
+                -
+                  mountPath: /guzzle_cache
+                  name: guzzle-request-cache
+                -
+                  mountPath: /web
+                  name: pubcrawler-html-root
+          priorityClassName: cron-priority-services
+          imagePullSecrets:
+            -
+              name: github-container-registry-auth
+          restartPolicy: Never
+          volumes:
+            -
+              name: guzzle-request-cache
+              persistentVolumeClaim:
+                claimName: guzzle-crawler-pubcrawler-lib-unb-ca
+            -
+              name: pubcrawler-html-root
+              persistentVolumeClaim:
+                claimName: pubcrawler-lib-unb-ca
