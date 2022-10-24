@@ -29,20 +29,26 @@ trait CriPublicationFormatterTrait {
     array $publications,
     string $path
   ) : void {
+    // Recover CRI affiliation id.
+    $cri_id = $this->config->get('pubcrawler.collections.cri.af-id');
     // Capture timestamp.
     $datestamp = date('F j, Y');
     // Sort and Separate current year from past publications.
     $publications_year = $publications_past = [];
     $years = array_column($publications, 'year');
     $citations = array_column($publications, 'citation');
+    // Sort by year and alpha, case insensitive.
     array_multisort($years, SORT_DESC, $citations, SORT_ASC, SORT_NATURAL|SORT_FLAG_CASE, $publications);
     $year = substr($datestamp, -4);
     foreach ($publications as $publication) {
-      if ($publication['year'] == $year) {
-        $publications_year[] = $publication;
-      }
-      else {
-        $publications_past[] = $publication;
+      // Only add if publication has a direct CRI affiliation.
+      if (in_array($cri_id, $publication['af_ids'])) {
+        if ($publication['year'] == $year) {
+          $publications_year[] = $publication;
+        }
+        else {
+          $publications_past[] = $publication;
+        }
       }
     }
     // Setup Twig.

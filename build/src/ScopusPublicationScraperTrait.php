@@ -312,6 +312,7 @@ trait ScopusPublicationScraperTrait {
   private function getMetadataFromPublication(array $publication) : array {
     $scopus_id = $publication['dc:identifier'] ?
       $this->getScopusIdFromIdentifier($publication['dc:identifier']) : NULL;
+    $af_ids = array_column($publication['affiliation'], 'afid');
     $doi = $publication['prism:doi'] ?? NULL;
     $citation_full = '';
     $abstract = '';
@@ -361,6 +362,7 @@ trait ScopusPublicationScraperTrait {
     // Return results.
     $results = [
       'scopus_id' => $scopus_id,
+      'af_ids' => $af_ids,
       'doi' => $doi,
       'title' => $title,
       'year' => $year,
