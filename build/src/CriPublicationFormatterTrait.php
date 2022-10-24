@@ -35,7 +35,7 @@ trait CriPublicationFormatterTrait {
     $publications_year = $publications_past = [];
     $years = array_column($publications, 'year');
     $citations = array_column($publications, 'citation');
-    array_multisort($years, SORT_DESC, $citations, SORT_ASC, $publications);
+    array_multisort($years, SORT_DESC, $citations, SORT_ASC, SORT_NATURAL|SORT_FLAG_CASE, $publications);
     $year = substr($datestamp, -4);
     foreach ($publications as $publication) {
       if ($publication['year'] == $year) {
