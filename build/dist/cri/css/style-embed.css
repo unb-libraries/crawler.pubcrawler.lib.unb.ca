@@ -32,6 +32,10 @@ li.pub-item {
   border-bottom: 1px solid var(--unb-gray-lite2);
 }
 
+li.pub-item:last-child {
+  border-bottom: none !important;
+}
+
 li.pub-item:hover {
   background-color: var(--unb-gray-lite2);
 }
@@ -136,6 +140,11 @@ div.pub-list-container {
 
 .pub-abstract-button.active:after {
   content: '-'; /* Unicode character for "minus" sign (-) */
+}
+
+/* Footer */
+.about-container {
+  padding-top: 1rem;
 }
 
 @media (min-width: 768px) {
