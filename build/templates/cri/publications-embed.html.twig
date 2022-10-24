@@ -24,7 +24,7 @@
           {%- for publication in publications_year -%}
             <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
               {%- if publication['doi'] is not empty -%}
-                <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}">
+                <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}" target="_blank">
               {%- endif -%}
               <p class="pub-citation">{{ publication['citation'] }}</p>
               {%- if publication['doi'] is not empty -%}
@@ -51,7 +51,7 @@
           {%- for publication in publications_past -%}
             <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
               {%- if publication['doi'] is not empty -%}
-                <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}">
+                <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}" target="_blank">
               {%- endif -%}
               <p class="pub-citation">{{ publication['citation'] }}</p>
               {%- if publication['doi'] is not empty -%}
