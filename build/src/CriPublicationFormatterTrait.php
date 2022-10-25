@@ -42,14 +42,14 @@ trait CriPublicationFormatterTrait {
     $year = substr($datestamp, -4);
     foreach ($publications as $publication) {
       // Only add if publication has a direct CRI affiliation.
-      if (in_array($cri_id, $publication['af_ids'])) {
+      //if (in_array($cri_id, $publication['af_ids'])) {
         if ($publication['year'] == $year) {
           $publications_year[] = $publication;
         }
         else {
           $publications_past[] = $publication;
         }
-      }
+      //}
     }
     // Setup Twig.
     $loader = new FilesystemLoader(__DIR__ . '/../templates/cri');
