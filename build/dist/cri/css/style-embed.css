@@ -66,6 +66,27 @@ li.pub-item:hover {
   font-family: monospace;
 }
 
+#goTopBtn {
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed/sticky position */
+  bottom: 2rem; /* Place the button at the bottom of the page */
+  right: 3rem; /* Place the button 30px from the right */
+  z-index: 99; /* Make sure it does not overlap */
+  border: none; /* Remove borders */
+  outline: none; /* Remove outline */
+  background-color: var(--unb-red); /* Set a background color */
+  color: white; /* Text color */
+  cursor: pointer; /* Add a mouse pointer on hover */
+  padding: .2rem 0.8rem 0rem .8rem ; /* Some padding */
+  border-radius: .3rem; /* Rounded corners */
+  font-size: 30px; /* Increase font size */
+  font-weight: bold; /* Increase font weight */
+}
+
+#goTopBtn:hover {
+  background-color: var(--unb-red-dark); /* Add a dark-grey background on hover */
+}
+
 /* Publication list container */
 div.pub-list-container {
   margin: 1em .25em;
