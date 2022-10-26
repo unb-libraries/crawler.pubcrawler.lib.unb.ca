@@ -74,11 +74,12 @@ li.pub-item:hover {
   z-index: 99; /* Make sure it does not overlap */
   border: none; /* Remove borders */
   outline: none; /* Remove outline */
-  background-color: var(--unb-red); /* Set a background color */
+  background-color: black; /* Set a background color */
   color: white; /* Text color */
   cursor: pointer; /* Add a mouse pointer on hover */
-  padding: .2rem 0.8rem 0rem .8rem ; /* Some padding */
+  padding: 1.2rem 0.8rem 0 .8rem ; /* Some padding */
   border-radius: .3rem; /* Rounded corners */
+  line-height: 1.2rem;
   font-size: 30px; /* Increase font size */
   font-weight: bold; /* Increase font weight */
 }
@@ -89,7 +90,7 @@ li.pub-item:hover {
 
 /* Publication list container */
 div.pub-list-container {
-  margin: 1em .25em;
+  margin: 1em .25em 0 .25rem;
 }
 
 /* Publication list */
@@ -167,8 +168,14 @@ div.pub-list-container {
 }
 
 /* Footer */
+.footer {
+  max-width: 100% !important;
+  margin: 0;
+  padding: 0 1rem 1rem 1rem;
+}
 .about-container {
   padding-top: 1rem;
+  text-align: right;
 }
 
 @media (min-width: 768px) {
@@ -181,4 +188,9 @@ div.pub-list-container {
   .pub-abstract {
 		text-align: left;
 	}
+}
+@media (max-width: 501px) {
+  .about-container {
+    text-align: left;
+  }
 }
