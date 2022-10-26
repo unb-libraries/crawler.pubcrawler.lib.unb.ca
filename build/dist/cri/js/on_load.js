@@ -1,4 +1,5 @@
 window.onload = function() {
+  window.myButton = document.getElementById("goTopBtn");
 
   var coll = document.getElementsByClassName("collapsible");
   var i;

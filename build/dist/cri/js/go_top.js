@@ -1,8 +1,3 @@
-// Get the button:
-window.onload = function() {
-  window.myButton = document.getElementById("goTopBtn");
-}
-
 // When the user scrolls down 20px from the top of the document, show the button
 window.onscroll = function() {scrollFunction()};
 
