@@ -1,11 +1,4 @@
 window.onload = function() {
-  // Remove &nbsp from footer divs.
-  var divs = document.querySelectorAll('div');
-
-  for (i = 0; i < divs.length; ++i) {
-    divs[i].innerHTML = divs[i].innerHTML.replace(/\&nbsp;/g, '');
-  }
-
   // Top button.
   window.myButton = document.getElementById("goTopBtn");
 
