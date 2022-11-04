@@ -15,8 +15,8 @@
     {% set currentYear = date('Y') %}
     <!-- Tab links -->
     <div class="tab">
-      <button href="#" class="tablinks btn d-block d-md-inline-block active" onclick="openPubs(event, 'current')">{{ currentYear|date('Y') }}</button>
-      <button href="#" class="tablinks btn d-block d-md-inline-block" onclick="openPubs(event, 'past')">2002-{{ currentYear|date('Y') - 1 }}</button>
+      <button href="#" id="currentBtn" class="tablinks btn d-block d-md-inline-block active" onclick="openPubs(event, 'current')">{{ currentYear|date('Y') }}</button>
+      <button href="#" id="pastBtn" class="tablinks btn d-block d-md-inline-block" onclick="openPubs(event, 'past')">2002-{{ currentYear|date('Y') - 1 }}</button>
     </div>
     <!--<div class="go-top-container">-->
       <button onclick="goTop()" id="goTopBtn" title="Go to top">^</button>
