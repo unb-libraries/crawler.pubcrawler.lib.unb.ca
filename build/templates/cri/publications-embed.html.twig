@@ -24,7 +24,7 @@
     <div id="current" class="pub-list-container tabcontent tab-default">
       {%- if publications_year is not empty -%}
         <h1 class="current-pubs-header">CRI-affiliated publications</h1>
-        <p><i>Updated as of {{ datestamp }}</i></p>
+        <p><i>Updated as of <span id="today">{{- datestamp -}}</span></i></p>
         <ul class="pub-list">
           {%- for publication in publications_year -%}
             <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
