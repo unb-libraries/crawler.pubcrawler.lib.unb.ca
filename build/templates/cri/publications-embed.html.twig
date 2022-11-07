@@ -16,7 +16,7 @@
     <!-- Tab links -->
     <div class="tab">
       <button href="#" id="currentBtn" class="tablinks btn d-block d-md-inline-block active" onclick="openPubs(event, 'current')">{{ currentYear|date('Y') }}</button>
-      <button href="#" id="pastBtn" class="tablinks btn d-block d-md-inline-block" onclick="openPubs(event, 'past')">2002-{{ currentYear|date('Y') - 1 }}</button>
+      <button href="#" id="pastBtn" data-test-id="pastBtn" class="tablinks btn d-block d-md-inline-block" onclick="openPubs(event, 'past')">2002-{{ currentYear|date('Y') - 1 }}</button>
     </div>
     <!--<div class="go-top-container">-->
       <button onclick="goTop()" id="goTopBtn" title="Go to top">^</button>
@@ -27,7 +27,7 @@
         <p><i>Updated as of <span id="today">{{- datestamp -}}</span></i></p>
         <ul class="pub-list">
           {%- for publication in publications_year -%}
-            <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
+            <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}" data-test-id="pubItem">
               {%- if publication['doi'] is not empty -%}
                 <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}" target="_blank">
               {%- endif -%}
@@ -54,7 +54,7 @@
         <p><i>Entries are sorted alphabetically and by year</i></p>
         <ul class="pub-list">
           {%- for publication in publications_past -%}
-            <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}">
+            <li class="pub-item" data-scopus-id="{{ publication['scopus_id'] }}" data-test-id="pubItem">
               {%- if publication['doi'] is not empty -%}
                 <a class="pub-doi d-block d-md-inline-block" href="https://doi.org/{{ publication['doi'] }}" target="_blank">
               {%- endif -%}
