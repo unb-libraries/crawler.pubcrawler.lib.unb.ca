@@ -3,3 +3,4 @@
 !/data/.gitkeep
 /vendor
 composer.lock
+/cypress
