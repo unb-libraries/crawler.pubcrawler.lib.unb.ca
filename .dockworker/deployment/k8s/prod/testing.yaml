@@ -21,7 +21,7 @@ spec:
       template:
         spec:
           nodeSelector:
-            deployenv: dev
+            environment: testing
           containers:
             -
               name: cron-testing-crawler-pubcrawler-lib-unb-ca
