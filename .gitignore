@@ -1,10 +1,4 @@
-/data/guzzle_cache
-/data/web/css
-data/web/img
-data/web/cri/css
-data/web/cri/img
-data/web/cri/js
-data/web/js
+/data
 /build/vendor
 !/data/.gitkeep
 /vendor
