@@ -1,5 +1,5 @@
 const host = 'https://pubcrawler.lib.unb.ca/cri/'
-describe("UNB LIB Scopus Publications Crawler", {baseUrl: host, groups: ['sites']}, ()=>{
+describe("Publications Crawler", {baseUrl: host, groups: ['sites']}, ()=>{
 
   context('CRI Page', {baseUrl: host}, () => {
     beforeEach(() => {
