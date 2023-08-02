@@ -21,7 +21,7 @@ spec:
       template:
         spec:
           nodeSelector:
-            deploy_utility: true
+            deploy_utility: 'true'
           containers:
             -
               name: cron-crawler-pubcrawler-lib-unb-ca
