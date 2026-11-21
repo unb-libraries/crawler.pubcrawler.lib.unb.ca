@@ -1,21 +1,23 @@
-name: crawler.pubcrawler.lib.unb.ca
+name: Build ghcr.io/unb-libraries/crawler.pubcrawler.lib.unb.ca
 
+# Build and push only: the prod CronJob runs the moving `prod` tag with pullPolicy Always,
+# so its next run picks up the new build. Nothing to deploy.
 on:
-  pull_request:
   push:
+    branches: [prod]
+  pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  cli:
-    uses: unb-libraries/dockworker-cli/.github/workflows/deployment-workflow-cron.yaml@5.x
+  build:
+    uses: unb-libraries/github-workflows/.github/workflows/publish-image.yaml@1.x
     with:
-      deploy-branches: '["prod"]'
+      image-name: ghcr.io/unb-libraries/crawler.pubcrawler.lib.unb.ca
     secrets:
-      DOCKER_CLOUD_ACCESS_TOKEN: ${{ secrets.DOCKER_CLOUD_ACCESS_TOKEN }}
-      DOCKER_CLOUD_USER_NAME: ${{ secrets.DOCKER_CLOUD_USER_NAME }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       GH_CONTAINER_REGISTRY_TOKEN: ${{ secrets.GH_CONTAINER_REGISTRY_TOKEN }}
       GH_CONTAINER_REGISTRY_USER: ${{ secrets.GH_CONTAINER_REGISTRY_USER }}
-      KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-      NEW_RELIC_ACCOUNT_ID: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}
-      NEW_RELIC_API_KEY: ${{ secrets.NEW_RELIC_API_KEY }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
