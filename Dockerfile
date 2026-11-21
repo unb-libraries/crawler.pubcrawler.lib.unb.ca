@@ -1,7 +1,9 @@
-FROM ghcr.io/unb-libraries/php-cli:8.x
+FROM ghcr.io/unb-libraries/nginx-php:3.24.x
 
 COPY ./build /build
-RUN mv /build/php/app-php.ini "$PHP_CONFD_DIR/zz_app.ini" && \
+# mbstring: without it symfony/console's polyfill calls iconv //IGNORE, which musl rejects.
+RUN apk --no-cache add "php${PHP_VERSION}-mbstring" && \
+  mv /build/php/app-php.ini "$PHP_CONFD_DIR/zz_app.ini" && \
   $RSYNC_MOVE /build/ /app/ && \
   composer install
 

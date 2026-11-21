@@ -2,13 +2,6 @@
 
 namespace PubCrawler;
 
-use Doctrine\Common\Cache\FilesystemCache;
-use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use Kevinrob\GuzzleCache\CacheMiddleware;
-use Kevinrob\GuzzleCache\Storage\DoctrineCacheStorage;
-use Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy;
-
 use PubCrawler\GuzzleApiRequestTrait;
 
 /**
