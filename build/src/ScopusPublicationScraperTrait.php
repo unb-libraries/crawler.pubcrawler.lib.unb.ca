@@ -310,9 +310,10 @@ trait ScopusPublicationScraperTrait {
    *   A standardized associative array of the publication summary metadata.
    */
   private function getMetadataFromPublication(array $publication) : array {
-    $scopus_id = $publication['dc:identifier'] ?
+    $scopus_id = !empty($publication['dc:identifier']) ?
       $this->getScopusIdFromIdentifier($publication['dc:identifier']) : NULL;
-    $af_ids = array_column($publication['affiliation'], 'afid');
+    // Not every Scopus record lists an affiliation.
+    $af_ids = array_column($publication['affiliation'] ?? [], 'afid');
     $doi = $publication['prism:doi'] ?? NULL;
     $citation_full = '';
     $abstract = '';
@@ -325,7 +326,8 @@ trait ScopusPublicationScraperTrait {
     // Get abstract.
     $abstract = $publication['dc:description'] ?? NULL;
     // Get publication year.
-    $year = substr($publication['prism:coverDate'], 0, 4) ?? NULL;
+    $year = isset($publication['prism:coverDate'])
+      ? substr($publication['prism:coverDate'], 0, 4) : NULL;
     // Get source title.
     $source = $publication['prism:publicationName'] ?? NULL;
     // Get volume.
