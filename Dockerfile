@@ -10,10 +10,14 @@ RUN apk --no-cache add "php${PHP_VERSION}-mbstring" && \
 ENTRYPOINT ["./bin/pubcrawler", "pubcrawler:scrape"]
 
 # Container metadata.
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
 LABEL ca.unb.lib.generator="PHP" \
   org.opencontainers.image.title="crawler.pubcrawler.lib.unb.ca" \
   org.opencontainers.image.description="crawler.pubcrawler.lib.unb.ca is the publication metadata scraper driving pubcrawler.lib.unb.ca." \
   org.opencontainers.image.vendor="University of New Brunswick Libraries" \
+  org.opencontainers.image.authors="UNB Libraries <libsupport@unb.ca>" \
   org.opencontainers.image.url="https://crawler.pubcrawler.lib.unb.ca" \
   org.opencontainers.image.source="https://github.com/unb-libraries/crawler.pubcrawler.lib.unb.ca" \
   org.opencontainers.image.version="$VERSION" \
