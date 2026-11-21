@@ -174,13 +174,17 @@ trait ScopusPublicationScraperTrait {
    *   The 'next page' URI, if it exists. Returns an empty string otherwise.
    */
   private static function getNextLinkFromPageData(array $data) : string {
+    // Cursor paging ends on a page with no entries; stop there.
+    if (empty($data['search-results']['entry'])) {
+      return "";
+    }
     $links = array_column(
-      $data['search-results']['link'],
+      $data['search-results']['link'] ?? [],
       '@ref'
     );
     // Get key of 'next' link (if available).
-    $next_key = array_search('next', $links);
-    if ($next_key) {
+    $next_key = array_search('next', $links, TRUE);
+    if ($next_key !== FALSE) {
       return $data['search-results']['link'][$next_key]['@href'];
     }
     return "";
@@ -197,7 +201,7 @@ trait ScopusPublicationScraperTrait {
    */
   private static function getScopusPublicationsFromPageData(array $data) : array {
     $publications = [];
-    foreach ($data['search-results']['entry'] as $entry) {
+    foreach ($data['search-results']['entry'] ?? [] as $entry) {
       $publications[] = $entry;
     }
     return $publications;
