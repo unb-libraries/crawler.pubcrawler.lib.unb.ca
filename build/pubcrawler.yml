@@ -6,6 +6,7 @@ pubcrawler:
       name: CRI Publications
       api-key-env-secret: SCOPUS_API_KEY
       af-id: 60084724
-      uri: https://api.elsevier.com/content/search/scopus?start=0&count=25&query=af-id(60084724)&apiKey=%s&view=COMPLETE
+      # Cursor paging: offset paging (start=N) repeats and drops records between pages.
+      uri: https://api.elsevier.com/content/search/scopus?cursor=*&count=25&query=af-id(60084724)&apiKey=%s&view=COMPLETE
       scraper: scrapeScopusPublications
       writer: writeCriPublications
